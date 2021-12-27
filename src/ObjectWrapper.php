@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Paysera\Component\ObjectWrapper;
 
+use Traversable;
 use ArrayIterator;
 use RuntimeException;
 use stdClass;
@@ -53,27 +54,27 @@ class ObjectWrapper implements ArrayAccess, IteratorAggregate
         return $data;
     }
 
-    public function offsetExists($key)
+    public function offsetExists($offset): bool
     {
-        return isset($this->data->$key);
+        return isset($this->data->$offset);
     }
 
-    public function offsetGet($key)
+    public function offsetGet($offset): mixed
     {
-        return isset($this->data->$key) ? $this->data->$key : null;
+        return isset($this->data->$offset) ? $this->data->$offset : null;
     }
 
-    public function offsetSet($offset, $value)
-    {
-        throw new RuntimeException('Modifying ObjectWrapper is not allowed');
-    }
-
-    public function offsetUnset($offset)
+    public function offsetSet($offset, $value): void
     {
         throw new RuntimeException('Modifying ObjectWrapper is not allowed');
     }
 
-    public function getIterator()
+    public function offsetUnset($offset): void
+    {
+        throw new RuntimeException('Modifying ObjectWrapper is not allowed');
+    }
+
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->data);
     }
